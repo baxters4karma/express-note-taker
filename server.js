@@ -27,7 +27,6 @@ function filterByQuery(query, notesArray) {
 
 function findById(id, notesArray) {
     const result = notesArray.filter(note => note.id === id)[0];
-    console.log(result);
     return result;
 };
 
@@ -52,7 +51,7 @@ function validateNote(note) {
 }
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, public, "index.html"));
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.get("/api/notes", (req, res) => {
