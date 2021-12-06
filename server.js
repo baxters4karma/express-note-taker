@@ -4,6 +4,9 @@ const path = require("path");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+// Helper method for generating unique ids
+const uuid = require("./helpers/uuid");
+
 // Sets up the Express app to handle data parsing
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
@@ -11,9 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(express.static("public"));
-
-// Helper method for generating unique ids
-const uuid = require('./helpers/uuid');
 
 const { notes } = require("./db/db.json");
 
