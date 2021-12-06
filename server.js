@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const PORT = process.env.PORT || 3001;
 const app = express();
+
 // Sets up the Express app to handle data parsing
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
@@ -10,6 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(express.static("public"));
+
+// Helper method for generating unique ids
+const uuid = require('./helpers/uuid');
 
 const { notes } = require("./db/db.json");
 
@@ -50,6 +54,21 @@ function validateNote(note) {
     return true;
 }
 
+function getIndexById(id, notesArray) {
+    if (notesArray && id) {
+        const currentNoteId = id;
+        for (let i = 0; i < notesArray.length; i++) {
+            const currentNote = notes[i];
+            let currentIdx = i;
+            if (currentNote.noteId === currentNoteId) {
+                res.json(currentNote);
+                return currentIdx;
+            }
+        }
+    }
+    res.json("Note ID not found");
+}
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -62,8 +81,8 @@ app.get("/api/notes", (req, res) => {
     res.json(results);
 });
 
-app.get("/api/notes/:id", (req, res) => {
-    const result = findById(req.params.id, notes);
+app.get("/api/notes/:noteId", (req, res) => {
+    const result = findById(req.params.noteId, notes);
     if (result) {
         res.json(result);
     } else {
@@ -72,8 +91,8 @@ app.get("/api/notes/:id", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-    // set id based on what the next index of the array will be
-    req.body.id = notes.length.toString();
+    // set noteId based on what the next index of the array will be
+    req.body.noteId = uuid();
 
     // if any data in req.body is incorrect, send 400 error back
     if (!validateNote(req.body)) {
@@ -85,8 +104,8 @@ app.post("/api/notes", (req, res) => {
     }
 });
 
-app.delete("/api/notes/:id", (req, res) => {
-    const noteIndex = getIndexById(req.params.id, notes);
+app.delete("/api/notes/:noteId", (req, res) => {
+    const noteIndex = getIndexById(req.params.noteId, notes);
     if (noteIndex !== -1) {
         notes.splice(noteIndex, 1);
         res.status(204).send();
