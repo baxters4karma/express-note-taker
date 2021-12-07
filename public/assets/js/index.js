@@ -1,5 +1,5 @@
 // Helper method for generating unique ids
-const uuid = require('./helpers/uuid');
+const uuid = require('../../../node_modules/uuid');
 
 let noteTitle;
 let noteText;
