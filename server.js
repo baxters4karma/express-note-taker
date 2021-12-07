@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 // Helper method for generating unique ids
-const uuid = require("./helpers/uuid");
+const uuid = require('uuid');
 
 // Sets up the Express app to handle data parsing
 // parse incoming string or array data
