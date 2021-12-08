@@ -29,7 +29,7 @@ function filterByQuery(query, notesArray) {
 };
 
 function findById(id, notesArray) {
-    const result = notesArray.filter(note => note.id === id)[0];
+    const result = notesArray.filter(note => note.noteId === id);
     return result;
 };
 
@@ -53,21 +53,6 @@ function validateNote(note) {
     return true;
 }
 
-function getIndexById(id, notesArray) {
-    if (notesArray && id) {
-        const currentNoteId = id;
-        for (let i = 0; i < notesArray.length; i++) {
-            const currentNote = notes[i];
-            let currentIdx = i;
-            if (currentNote.noteId === currentNoteId) {
-                res.json(currentNote);
-                return currentIdx;
-            }
-        }
-    }
-    res.json("Note ID not found");
-}
-
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -81,7 +66,8 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.get("/api/notes/:noteId", (req, res) => {
-    const result = findById(req.params.noteId, notes);
+    let currentNoteId = req.params.noteId;
+    const result = findById(currentNoteId, notes);
     if (result) {
         res.json(result);
     } else {
@@ -90,7 +76,7 @@ app.get("/api/notes/:noteId", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-    // set noteId based on what the next index of the array will be
+    // create unique identifier for note entry
     req.body.noteId = uuid();
 
     // if any data in req.body is incorrect, send 400 error back
@@ -104,16 +90,18 @@ app.post("/api/notes", (req, res) => {
 });
 
 app.delete("/api/notes/:noteId", (req, res) => {
-    const noteIndex = getIndexById(req.params.noteId, notes);
-    if (noteIndex !== -1) {
-        notes.splice(noteIndex, 1);
-        res.status(204).send();
-    } else {
-        res.status(404).send();
-    }
+    newNotesArray = notes.filter(function (note) {
+        return note.noteId !== req.params.noteId;
+    })
+    fs.writeFileSync(
+        path.join(__dirname, ".", "db", "db.json"),
+        JSON.stringify({ notes: newNotesArray }, null, 2)
+    );
 });
 
 // using method to make server listen
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });
+
+module.exports = { uuid };

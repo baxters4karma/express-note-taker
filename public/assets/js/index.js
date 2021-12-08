@@ -1,6 +1,3 @@
-// Helper method for generating unique ids
-const uuid = require('../../../node_modules/uuid');
-
 let noteTitle;
 let noteText;
 let saveNoteBtn;
@@ -56,7 +53,7 @@ const deleteNote = id =>
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
-  if (activeNote.id) {
+  if (activeNote.noteId) {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
@@ -72,8 +69,7 @@ const renderActiveNote = () => {
 const handleNoteSave = () => {
   const newNote = {
     title: noteTitle.value,
-    text: noteText.value,
-    id: uuid(),
+    text: noteText.value
   };
   saveNote(newNote).then(() => {
     getAndRenderNotes();
@@ -87,13 +83,13 @@ const handleNoteDelete = e => {
   e.stopPropagation();
 
   const note = e.target;
-  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+  const activeNoteId = JSON.parse(note.parentElement.getAttribute('data-note')).noteId;
 
-  if (activeNote.id === noteId) {
+  if (activeNote.noteId === activeNoteId) {
     activeNote = {};
   }
 
-  deleteNote(noteId).then(() => {
+  deleteNote(activeNoteId).then(() => {
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -103,10 +99,11 @@ const handleNoteDelete = e => {
 const handleNoteView = e => {
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
+  console.log("handleNoteView: " + JSON.stringify(activeNote));
   renderActiveNote();
 };
 
-// Sets the activeNote to and empty object and allows the user to enter a new note
+// Sets the activeNote to an empty object and allows the user to enter a new note
 const handleNewNoteView = e => {
   activeNote = {};
   renderActiveNote();
