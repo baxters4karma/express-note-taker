@@ -67,9 +67,12 @@ app.get("/api/notes", (req, res) => {
     res.json(results);
 });
 
-app.get("/api/notes/:noteId", (req, res) => {
-    let currentNoteId = req.params.noteId;
-    const result = findById(currentNoteId, notes);
+app.get("/api/notes/:id", (req, res) => {
+    let currentNoteId = req.params.id;
+    // Read data from 'db.json' file
+    let results = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+
+    const result = findById(currentNoteId, results.notes);
     if (result) {
         res.json(result);
     } else {
@@ -85,30 +88,34 @@ app.post("/api/notes", (req, res) => {
     if (!validateNote(req.body)) {
         res.status(400).send("The note is not properly formatted.");
     } else {
-        // add note to json file and notes array in this function
+        // add note to json file and notes array in this function        
         const note = createNewNote(req.body, notes);
         res.json(note);
     }
 });
 
-app.delete("/api/notes/:noteId", (req, res) => {
-    newNotesArray = notes.filter(function (note) {
-        return note.noteId !== req.params.noteId;
-    })
-    fs.writeFileSync(
-        path.join(__dirname, ".", "db", "db.json"),
-        JSON.stringify({ notes: newNotesArray }, null, 2)
-    );
-});
+// API DELETE request
+app.delete("/api/notes/:id", (request, response) => {
 
-app.delete("/api/notes/:id", (req, res) => {
-    const result = findById(req.params.id, notes);
-    if (result.id !== -1) {
-        notes.splice(result.id, 1);
-        res.status(204).send("record was deleted");
-    } else {
-        res.status(404).send();
-    }
+    // Fetched id to delete
+    let nId = request.params.id.toString();
+
+    console.log(`\n\nDELETE note request for noteId: ${nId}`);
+
+    // Read data from 'db.json' file
+    let data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+
+    // filter data to get notes except the one to delete    
+    const newData = notes.filter(note => note.noteId !== nId);
+
+
+    // Write new data to 'db.json' file
+    fs.writeFileSync('./db/db.json', JSON.stringify({ "notes": newData }));
+
+    console.log(`\nSuccessfully deleted note with id : ${nId}`);
+
+    // Send response
+    response.json(newData);
 });
 
 // using method to make server listen
