@@ -1,17 +1,15 @@
+// Dependencies
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const PORT = process.env.PORT || 3001;
 const app = express();
-// Helper method for generating unique ids
-const { v4: uuid } = require('uuid');
+// imported 'uuid' npm package for unique id
+const { v4: uuidv4 } = require('uuid');
 
 // Sets up the Express app to handle data parsing
-// parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
-// parse incoming JSON data
 app.use(express.json());
-
 app.use(express.static("public"));
 
 const { notes } = require("./db/db.json");
@@ -57,6 +55,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+app.get("/notes", (req, res) => {
+    res.sendFile(path.join(directory, "notes.html"));
+});
+
 app.get("/api/notes", (req, res) => {
     let results = notes;
     if (req.query) {
@@ -76,8 +78,8 @@ app.get("/api/notes/:noteId", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-    // create unique identifier for note entry
-    req.body.noteId = uuid();
+    // set id to universal unique id
+    req.body.id = uuidv4();
 
     // if any data in req.body is incorrect, send 400 error back
     if (!validateNote(req.body)) {
@@ -99,9 +101,19 @@ app.delete("/api/notes/:noteId", (req, res) => {
     );
 });
 
+app.delete("/api/notes/:id", (req, res) => {
+    const result = findById(req.params.id, notes);
+    if (result.id !== -1) {
+        notes.splice(result.id, 1);
+        res.status(204).send("record was deleted");
+    } else {
+        res.status(404).send();
+    }
+});
+
 // using method to make server listen
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });
 
-module.exports = { uuid };
+module.exports = { uuidv4 };

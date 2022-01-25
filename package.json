@@ -15,11 +15,11 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/baxters4karma/express-note-taker.git"
+		"url": "git+https://github.com/christinedbaxter/express-note-taker.git"
 	},
 	"keywords": [],
 	"bugs": {
-		"url": "https://github.com/baxters4karma/express-note-taker/issues"
+		"url": "https://github.com/christinedbaxter/express-note-taker/issues"
 	},
-	"homepage": "https://github.com/baxters4karma/express-note-taker#readme"
+	"homepage": "https://github.com/christinedbaxter/express-note-taker#readme"
 }

@@ -41,7 +41,7 @@ npm i
 
 **_GitHub Repository_**
 
-- [GitHub Repository URL](https://github.com/baxters4karma/express-note-taker)
+- [GitHub Repository URL](https://github.com/christinedbaxter/express-note-taker)
 
 [back to top](#table-of-contents)
 
@@ -89,6 +89,6 @@ No tests created for this project.
 
 ## Questions
 
-If you have any questions about the repo, open an issue or contact me directly at christine.d.baxter@live.com. You can find more of my work at [baxters4karma](https://github.com/baxters4karma/).
+If you have any questions about the repo, open an issue or contact me directly at christine.d.baxter@live.com. You can find more of my work at [christinedbaxter](https://github.com/christinedbaxter/).
 
 [back to top](#table-of-contents)
