@@ -26,12 +26,12 @@ const hide = elem => {
 let activeNote = {};
 
 const getNotes = () =>
-  fetch("/api/notes", {
+  fetch('/api/notes', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
     }
-  })
+  });
 
 const saveNote = note =>
   fetch('/api/notes', {
@@ -53,7 +53,7 @@ const deleteNote = id =>
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
-  if (activeNote.noteId) {
+  if (activeNote.id) {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
@@ -83,9 +83,9 @@ const handleNoteDelete = e => {
   e.stopPropagation();
 
   const note = e.target;
-  const activeNoteId = JSON.parse(note.parentElement.getAttribute('data-note')).noteId;
+  const activeNoteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
 
-  if (activeNote.noteId === activeNoteId) {
+  if (activeNote.id === activeNoteId) {
     activeNote = {};
   }
 
@@ -117,10 +117,10 @@ const handleRenderSaveBtn = () => {
 };
 
 // Render the list of note titles
-const renderNoteList = async notes => {
-  let jsonNotes = await notes.json();
+const renderNoteList = notes => {
+  let jsonNotes = notes.json();
   if (window.location.pathname === '/notes.html') {
-    noteList.forEach(el => (el.innerHTML = ` `));
+    noteList.forEach(el => (el.innerHTML = ''));
   }
 
   let noteListItems = [];
@@ -158,8 +158,9 @@ const renderNoteList = async notes => {
     noteListItems.push(createLi('No saved Notes', false));
   }
 
-  jsonNotes.forEach(note => {
+  Array.from(jsonNotes).forEach(function (note) {
     const li = createLi(note.title);
+    console.log(li);
     li.dataset.note = JSON.stringify(note);
 
     noteListItems.push(li);
