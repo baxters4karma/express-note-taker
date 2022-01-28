@@ -64,13 +64,13 @@ const noteController = {
     let currentNoteId = params.id;
 
     // Retrieve existing notes from file   
-    let updatedNotesData = notes.filter(note => note.id != currentNoteId);
+    let updatedNotesData = notes.filter(note => note.id !== currentNoteId);
 
     // Write updated notes data back to file
     writeFile(
       path.join(__dirname, "..", "db", "db.json"),
       JSON.stringify({ notes: updatedNotesData }, null, 2),
-      (err) => err ? console.log(err) : console.log('Note has been deleted from JSON file')
+      (err) => err ? console.log(err) : console.log(`Note with ${currentNoteId} ID has been deleted from JSON file`)
     );
     res.json('Note deleted');
   }

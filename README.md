@@ -27,17 +27,21 @@ npm i
 **_Acceptance Criteria/Pseudocode_**
 
 - [User Story and Acceptance Criteria](./docs/acceptance-criteria.md)
-- [Pseudocode](./docs/pseudocode.md)
 
 **_Functional, Deployed Application_**
 
 - [Click to Run Application](https://afternoon-earth-73332.herokuapp.com/)
 
-**_Walk-through Animations_\_\***
+**_Mock-up and Walk-through Animation_**
 
-- [Home Screen](link to animated gif here)
-- [Note Screen](link to animated gif here)
-- [Adding Note Screen](link to animated gif here)
+- Home Screen:
+  ![Home Screen](./docs/Assets/HomeScreen.jpg)
+
+- Note Screen:
+  ![Note Screen](./docs/Assets/NoteScreen.jpg)
+
+- Adding Note Demo</br>
+  ![Adding Note Demo](./docs/Assets/AddingNoteDemo.gif)
 
 **_GitHub Repository_**
 
@@ -57,11 +61,13 @@ Project folder structure:
 
 ```
 .
-├── db/        // location for db.json file storing data
-├── docs/      // documentation and application animations
-├── public/    // html, css, and js needed for application
-├── .gitignore // indicates folders/files Git should ignore
-├── server.js  // API interactions
+├── controllers/    // handle CRUD operations
+├── db/             // location for db.json file storing data
+├── docs/           // documentation and application animations
+├── public/         // html, css, and js needed for application
+├── routes/         // forward supported requests to appropriate controllers
+├── .gitignore      // indicates folders/files Git should ignore
+├── server.js       // API interactions
 └── package.json
 ```
 

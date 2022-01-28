@@ -146,29 +146,27 @@ const renderNoteList = notes => {
         'text-danger',
         'delete-note'
       );
+
       delBtnEl.addEventListener('click', handleNoteDelete);
 
       liEl.append(delBtnEl);
     }
-
     return liEl;
   };
 
-  if (jsonNotes.length === 0) {
-    noteListItems.push(createLi('No saved Notes', false));
-  }
+  jsonNotes.then((noteData) => {
+    if (noteData.notes.length === 0) {
+      noteListItems.push(createLi('No saved Notes', false));
+    }
 
-  Array.from(jsonNotes).forEach(function (note) {
-    const li = createLi(note.title);
-    console.log(li);
-    li.dataset.note = JSON.stringify(note);
-
-    noteListItems.push(li);
+    for (let note of noteData.notes) {
+      const li = createLi(note.title);
+      li.dataset.note = JSON.stringify(note);
+      console.log(li);
+      noteList[0].append(li);
+      //noteListItems.push(li);
+    }
   });
-
-  if (window.location.pathname === '/notes.html') {
-    noteListItems.forEach(note => noteList[0].append(note));
-  }
 };
 
 // Gets notes from the db and renders them to the sidebar
